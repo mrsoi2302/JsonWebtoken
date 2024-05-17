@@ -15,7 +15,6 @@ import java.util.Date;
 @Slf4j
 public class TokenProvider {
 
-    private Key key;
     private Key getSigninKey(SignatureAlgorithm alg) {
         switch (alg.getValue()) {
             case "HS256" -> {
@@ -41,7 +40,8 @@ public class TokenProvider {
     }
 
     public String tokenGenerator(SignatureAlgorithm alg, String username) {
-        this.key = getSigninKey(alg);
+        com.example.jwt.Key.Value = getSigninKey(alg);
+        var key = com.example.jwt.Key.Value;
         log.warn(key.toString());
         log.warn(key.getAlgorithm() + " " + key.getFormat() + " " + Arrays.toString(key.getEncoded()));
         long EXPIRATED = 1000 * 60 * 60 * 24;
@@ -57,7 +57,7 @@ public class TokenProvider {
 
     public String getUser(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(com.example.jwt.Key.Value)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
@@ -67,7 +67,7 @@ public class TokenProvider {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
-                    .setSigningKey(key)
+                    .setSigningKey(com.example.jwt.Key.Value)
                     .build()
                     .parseClaimsJws(token);
             return true;
