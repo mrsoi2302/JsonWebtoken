@@ -75,9 +75,8 @@ public class TokenProvider {
             if (e instanceof ExpiredJwtException){
                 log.info("Token expired");
             }
-            log.info("Invalid token");
+            throw e;
         }
-        return false;
     }
 
 }
